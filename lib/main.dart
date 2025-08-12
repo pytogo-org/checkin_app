@@ -1,5 +1,5 @@
+import 'package:checking_app/screens/entrycheck_screen.dart';
 import 'package:checking_app/screens/login_screen.dart';
-import 'package:checking_app/screens/scanner_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
@@ -37,7 +37,7 @@ class EventCheckInApp extends StatelessWidget {
       ),
       home: const AuthWrapper(),
       routes: {
-        '/scanner': (context) => ScannerScreen(),
+        '/scanner': (context) => EntryCheckScreen(),
       },
     );
   }

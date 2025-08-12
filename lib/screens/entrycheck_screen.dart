@@ -1,3 +1,4 @@
+import 'package:checking_app/screens/foodcheck_screen.dart';
 import 'package:checking_app/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,14 +6,14 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/api_service.dart';
 
-class ScannerScreen extends StatefulWidget {
-  const ScannerScreen({super.key});
+class EntryCheckScreen extends StatefulWidget {
+  const EntryCheckScreen({super.key});
 
   @override
-  State<ScannerScreen> createState() => _ScannerScreenState();
+  State<EntryCheckScreen> createState() => EntryCheckScreenState();
 }
 
-class _ScannerScreenState extends State<ScannerScreen> {
+class EntryCheckScreenState extends State<EntryCheckScreen> {
   late MobileScannerController cameraController;
   bool _isScanning = false;
   bool _torchEnabled = false;
@@ -269,39 +270,58 @@ class _ScannerScreenState extends State<ScannerScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text('Scan Ticket', style: TextStyle(color: Colors.white)),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              icon: Icon(Icons.fastfood_outlined),
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const FoodCheckScreen()),
+                );
+              },
+              tooltip: 'Logout',
+              color: Colors.white,
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all<Color>(
+                  // ignore: deprecated_member_use
+                  Colors.green,
+                ),
+              ),
+            ),
+            const Text('Entry check'),
+            IconButton(
+              icon: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                child: Icon(
+                  _torchEnabled ? Icons.flash_on : Icons.flash_off,
+                  key: ValueKey(_torchEnabled),
+                  color: _torchEnabled
+                      ? Theme.of(context).colorScheme.primary
+                      : Colors.black,
+                ),
+              ),
+              onPressed: _toggleTorch,
+            ),
+            IconButton(
+              icon: Icon(Icons.logout_outlined),
+              onPressed: _showLogoutConfirmation,
+              tooltip: 'Logout',
+              color: Colors.white,
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all<Color>(
+                  // ignore: deprecated_member_use
+                  Colors.red,
+                ),
+              ),
+            ),
+          ],
+        ),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
         elevation: 0,
         scrolledUnderElevation: 0,
         actionsPadding: EdgeInsets.only(right: 10, left: 10),
-        actions: [
-          IconButton(
-            icon: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              child: Icon(
-                _torchEnabled ? Icons.flash_on : Icons.flash_off,
-                key: ValueKey(_torchEnabled),
-                color: _torchEnabled
-                    ? Theme.of(context).colorScheme.primary
-                    : Colors.white,
-              ),
-            ),
-            onPressed: _toggleTorch,
-          ),
-          IconButton(
-            icon: Icon(Icons.logout_outlined),
-            onPressed: _showLogoutConfirmation,
-            tooltip: 'Logout',
-            color: Colors.white,
-            style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all<Color>(
-                // ignore: deprecated_member_use
-                Colors.red.withOpacity(0.7),
-              ),
-            ),
-          ),
-        ],
       ),
       body: Stack(
         children: [
